@@ -1,0 +1,172 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="position: fixed">
+  <a class="navbar-brand" href="">
+    <img src="../../assets/images.jpeg" width="50" height="50" class="d-inline-block align-top" alt="">
+    <span style="font-size: 30px; margin-left: 10px">Trivia App</span>
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse justify-content-end " id="navbarNavDropdown">
+    <ul class="nav nav-light justify-content-end" style="margin-left: 100px">
+
+
+      <!-- to go back to home -->
+      <li class="nav-item">
+        <a class="nav-link text-light " href="/home">Home <span class="sr-only">(current)</span></a>
+      </li>
+
+    </ul>
+  </div>
+</nav>
+
+
+<div class="container" style="margin-top: 20vh">
+  <div style="margin-top:5%" class="row  d-flex justify-content-center">
+    <div style="padding:2%" class="col-6">
+      <!-- first Question -->
+      <div class="card" *ngIf="questionToken == 1">
+        <div class="card-header ">
+          Q.no : 1
+        </div>
+        <div class="card-body">
+        
+          <form #nameForm="ngForm" (ngSubmit)='setName()'>
+            <div class="form-group">
+              <label for="exampleInputName1">What is your name?</label>
+
+
+
+              <input id="name" name="Name" class="form-control" required [(ngModel)]="Name" #name="ngModel">
+            </div>
+
+            <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+
+              <div *ngIf="name.errors.required">
+                Name is required.
+              </div>
+
+
+            </div>
+            <button type="submit" class="btn btn-primary " style="float: right"
+              [disabled]="!nameForm.form.valid">Next</button>
+
+          </form>
+        </div>
+
+      </div>
+
+
+      <!-- second question card -->
+
+
+      <div class="card" *ngIf="questionToken == 2">
+        <div class="card-header ">
+          Q.no : 2
+        </div>
+        <div class="card-body">
+         
+          <form #bestCricketerForm="ngForm" (ngSubmit)='selectBestCricketer()'>
+            <div class="form-group">
+              <label for="exampleInputCricketer">Who is the best cricketer in the world? </label>
+
+
+
+             
+
+              <select [(ngModel)]="bestCricketer" #bestCricketer1="ngModel" name="bestCricketer" class="form-control"
+                id="bestCricketer" required>
+                <option *ngFor="let cricketer of cricketerArray" [value]="cricketer">{{cricketer}}</option>
+              </select>
+
+
+
+
+
+            </div>
+
+            <div *ngIf="bestCricketer1.invalid && (bestCricketer1.dirty || bestCricketer1.touched)"
+              class="alert alert-danger">
+
+              <div *ngIf="bestCricketer1.errors.required">
+                select best cricketer
+              </div>
+
+
+            </div>
+            <button type="submit" class="btn btn-primary " style="float: right"
+              [disabled]="!bestCricketerForm.form.valid">Next</button>
+
+          </form>
+        </div>
+
+      </div>
+
+
+      <!-- question 3 -->
+
+
+
+      <div class="card" *ngIf="questionToken == 3">
+        <div class="card-header ">
+          Q.no : 3
+        </div>
+        <div class="card-body">
+
+
+          <label for="exampleInputCricketer">Who is the best cricketer in the world? </label>
+
+          <form [formGroup]="form" (ngSubmit)="setFinalColor()">
+            <div class="m-2" formArrayName="colors" *ngFor="let color of form.controls.colors.controls; let i = index">
+              
+
+              <input type="checkbox" [formControlName]="i" (change)="setColorArray(colorsData[i], $event)">
+              {{colorsData[i].name}}
+              <br>
+            
+
+            </div>
+
+            <div *ngIf="!form.valid && !form.pristine" class="mt-1 text-danger">At least one colors must be selected
+            </div>
+
+            <button type="submit" class="btn btn-primary " style="float: right" [disabled]="!form.valid">Next</button>
+          </form>
+
+
+        </div>
+
+      </div>
+
+
+
+      <!-- for summary -->
+
+      <div class="card" *ngIf="questionToken == 4">
+        <div class="card-header " style="text-align: center">
+          <b>Summary</b>
+        </div>
+        <div class="card-body">
+          <h4 style="font-weight: bold">Hello {{this.Name}}</h4>
+          <br>
+          <h5 style="font-weight: bold">Here are the answers selected:</h5>
+          <br>
+          <p style="font-weight: bold">Q.1 :- Who is the best cricketer in the world?</p>
+          <p>Answer:- {{this.bestCricketer}} </p>
+          <br>
+          <p style="font-weight: bold">Q.2 :- What are the colors in the national flag?</p>
+          <p>Answer:-{{colorString}}</p>
+        </div>
+
+
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary " style="float:right" (click)="resetData()">FINISH</button>
+          <a href="/history" class="btn btn-primary " style="float:left">HISTORY</a>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
