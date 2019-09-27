@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, ValidatorFn } from '@angular/forms';
+import { AppService } from '../app.service';
 
 @Component({
   selector: 'app-quiz',
@@ -28,7 +29,7 @@ export class QuizComponent implements OnInit {
   colorString: any ="";
  
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, public appService: AppService) {
 
     
 
@@ -82,6 +83,17 @@ export class QuizComponent implements OnInit {
 
 
     this.addCheckboxes();
+    // this.getAllQuestion();
+  }
+
+  public getAllQuestion = () =>{
+    this.appService.getAllQuestions().subscribe((apiResponse) =>{
+      if(apiResponse.status === 200){
+        console.log('inside apiresponse of status 200',apiResponse);
+      } else{
+        console.log('inside apiresponse',apiResponse);
+      }
+    })
   }
 
 
@@ -133,7 +145,7 @@ export class QuizComponent implements OnInit {
 
     this.setData()
    
-    this.questionToken = 4
+    
 
   }
 
@@ -141,31 +153,39 @@ export class QuizComponent implements OnInit {
 
   setData(){
 
-    let Arr =[]
+    // let Arr =[]
 
-     Arr = JSON.parse(localStorage.getItem('triviaHistory'))
+    //  Arr = JSON.parse(localStorage.getItem('triviaHistory'))
 
-     if ( Arr == null){
-      Arr =[]
-     }
+    //  if ( Arr == null){
+    //   Arr =[]
+    //  }
 
 
     let tempData = {
       "name":this.Name,
       "bestCricketer":this.bestCricketer,
-      "date": Date.now(),
+      // "date": Date.now(),
       "colorSelected":this.colorSelected,
       "colorString":this.colorString
 
     }
 
-    Arr.push(tempData);
+    this.appService.SubmitQuestion(tempData).subscribe((response)=>{
+
+      
+      console.log("the submit apirespone is",response)
+      this.questionToken = 4
+    })
+
+
+    // Arr.push(tempData);
 
     // the new game is saved to the local storage
-    localStorage.setItem('triviaHistory', JSON.stringify(Arr))
+    // localStorage.setItem('triviaHistory', JSON.stringify(Arr))
 
 
-    console.log("item" ,JSON.parse(localStorage.getItem('triviaHistory')));
+    // console.log("item" ,JSON.parse(localStorage.getItem('triviaHistory')));
 
     
   
